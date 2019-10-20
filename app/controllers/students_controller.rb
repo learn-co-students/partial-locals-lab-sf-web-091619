@@ -1,4 +1,11 @@
 class StudentsController < ApplicationController
+  before_action :find_student, only: [:edit, :show]
+
+  def index
+    @students = Student.search(params[:query])
+
+  end
+
   def new
     @student = Student.new
   end
@@ -13,18 +20,20 @@ class StudentsController < ApplicationController
   end
 
   def edit
-    @student = Student.find(params[:id])
   end
 
   def show
+  end
+
+  private
+
+  def student_params
+    params.require(:student).permit(:name, :birthday, :hometown, :query)
+  end
+  
+  def find_student
     @student = Student.find(params[:id])
   end
 
-  def index
-    @students = Student.all
-  end
 
-  def student_params
-    params.require(:student).permit(:name, :birthday, :hometown)
-  end
 end
